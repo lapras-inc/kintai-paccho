@@ -19,9 +19,13 @@ class KOTRequester:
             "Content-Type": "application/json; charset=utf-8",
             "Authorization": "Bearer {token}".format(token=self.KOT_TOKEN),
         }
-        self.proxies = {
-            "https": self.KOT_HTTPS_PROXY,
-        } if self.KOT_HTTPS_PROXY else None
+        self.proxies = (
+            {
+                "https": self.KOT_HTTPS_PROXY,
+            }
+            if self.KOT_HTTPS_PROXY
+            else None
+        )
 
     def get(self, uri):
         url = self.base_url + uri
