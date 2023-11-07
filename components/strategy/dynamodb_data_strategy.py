@@ -11,6 +11,7 @@ from components.strategy.data_strategy import DataStrategy
 class DataModel(Model):
     class Meta:
         table_name = os.environ["DYNAMODB_DATA_TABLE_NAME"]
+        region = os.environ["DYNAMODB_REGION"]
 
     key = UnicodeAttribute(hash_key=True)
     value = UnicodeAttribute()
