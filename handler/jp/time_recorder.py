@@ -3,7 +3,7 @@ from components.requester import KOTException
 from components.typing import SlackRequest
 from components.usecase import RecordType, record_time
 
-from .helper import response_configuration_help, response_kot_error
+from .helper import response_configuration_help, response_general_error, response_kot_error
 
 
 def record_clock_in(say, request: SlackRequest):
@@ -16,6 +16,8 @@ def record_clock_in(say, request: SlackRequest):
         say(":den_paccho1: < おはー　だこくしたよ〜")
     except KOTException as e:
         response_kot_error(say, e)
+    except Exception as e:
+        response_general_error(say, e)
 
 
 def record_clock_out(say, request: SlackRequest):
@@ -28,6 +30,8 @@ def record_clock_out(say, request: SlackRequest):
         say(":gas_paccho_1: < おつー　打刻したよー")
     except KOTException as e:
         response_kot_error(say, e)
+    except Exception as e:
+        response_general_error(say, e)
 
 
 def record_start_break(say, request: SlackRequest):
@@ -40,6 +44,8 @@ def record_start_break(say, request: SlackRequest):
         say(":gas_paccho_1: < はーい　ゆっくり休んでねー")
     except KOTException as e:
         response_kot_error(say, e)
+    except Exception as e:
+        response_general_error(say, e)
 
 
 def record_end_break(say, request: SlackRequest):
@@ -52,3 +58,5 @@ def record_end_break(say, request: SlackRequest):
         say(":den_paccho1: < おっけー　がんばっていこ〜")
     except KOTException as e:
         response_kot_error(say, e)
+    except Exception as e:
+        response_general_error(say, e)

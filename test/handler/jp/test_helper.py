@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 
 from components.requester import KOTException
-from handler.jp.helper import response_configuration_help, response_kot_error
+from handler.jp.helper import response_configuration_help, response_general_error, response_kot_error
 
 
 class TestHelper(unittest.TestCase):
@@ -26,9 +26,23 @@ class TestHelper(unittest.TestCase):
 
         response_kot_error(say=say, e=KOTException(error_message))
 
-        self.assertEqual(say.call_count, 2)
+        self.assertEqual(say.call_count, 1)
 
         call_args_list = say.call_args_list
 
         self.assertIn("返ってきたぱっちょ！", call_args_list[0][0][0])
-        self.assertEqual(error_message, call_args_list[1][0][0])
+        self.assertIn(error_message, call_args_list[0][0][0])
+
+    def test_response_general_error(self):
+        say = MagicMock()
+
+        error_message = "dummy error message"
+
+        response_general_error(say=say, e=Exception(error_message))
+
+        self.assertEqual(say.call_count, 1)
+
+        call_args_list = say.call_args_list
+
+        self.assertIn("しばらく待って", call_args_list[0][0][0])
+        self.assertIn(error_message, call_args_list[0][0][0])

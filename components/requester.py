@@ -30,6 +30,7 @@ class KOTRequester:
     def get(self, uri):
         url = self.base_url + uri
         resp = requests.get(url, headers=self.headers, proxies=self.proxies)
+        resp.raise_for_status()
         resp_json = json.loads(resp.text)
         if "errors" in resp_json:
             raise KOTException(resp_json["errors"][0]["message"])
@@ -38,6 +39,7 @@ class KOTRequester:
     def post(self, uri, payload):
         url = self.base_url + uri
         resp = requests.post(url, headers=self.headers, data=payload, proxies=self.proxies)
+        resp.raise_for_status()
         resp_json = json.loads(resp.text)
         if "errors" in resp_json:
             raise KOTException(resp_json["errors"][0]["message"])
@@ -46,6 +48,7 @@ class KOTRequester:
     def put(self, uri, payload):
         url = self.base_url + uri
         resp = requests.put(url, headers=self.headers, json=payload, proxies=self.proxies)
+        resp.raise_for_status()
         resp_json = json.loads(resp.text)
         if "errors" in resp_json:
             raise KOTException(resp_json["errors"][0]["message"])
