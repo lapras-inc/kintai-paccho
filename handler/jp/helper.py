@@ -1,3 +1,9 @@
+import logging
+from traceback import TracebackException
+
+logger = logging.getLogger()
+
+
 def response_configuration_help(say):
     say(
         """
@@ -9,5 +15,12 @@ King of Time にログインしたあとに画面右上の自分の名前の左�
 
 
 def response_kot_error(say, e: Exception):
-    say("King of Time でエラーレスポンスが返ってきたぱっちょ！")
-    say(str(e))
+    msg = "".join(TracebackException.from_exception(e).format())
+    logger.error(msg)
+    say(f"King of Time からエラーレスポンスが返ってきたぱっちょ！ ```{msg}```")
+
+
+def response_general_error(say, e: Exception):
+    msg = "".join(TracebackException.from_exception(e).format())
+    logger.error(msg)
+    say(f"エラーが発生したぱっちょ！しばらく待ってからもう一度試してみてね！ ```{msg}```")

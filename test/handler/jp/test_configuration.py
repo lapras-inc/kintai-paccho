@@ -79,12 +79,11 @@ class TestConfiguration(unittest.TestCase):
 
         register_employee_code(say=say, request=request)
 
-        self.assertEqual(say.call_count, 2)
-
+        self.assertEqual(say.call_count, 1)
         call_args_list = say.call_args_list
 
-        self.assertIn("King of Time でエラーレスポンス", call_args_list[0][0][0])
-        self.assertIn(error_message, call_args_list[1][0][0])
+        self.assertIn("King of Time からエラーレスポンス", call_args_list[0][0][0])
+        self.assertIn(error_message, call_args_list[0][0][0])
 
     def test_can_register(self):
         patterns = [
