@@ -1,0 +1,16 @@
+# SlackのTokenをそれぞれ設定
+# ローカルで動かす場合はtest用のBOTがいるのでそれを使用すると良い
+# ref : https://api.slack.com/apps/A08F98A9HD4
+
+# OAuth & Permissions の Bot User OAuth Token を設定
+# https://api.slack.com/apps/A08F98A9HD4/oauth?
+export SLACK_BOT_TOKEN=
+
+# Basic Information の App-Level Tokens を設定
+# https://api.slack.com/apps/A08F98A9HD4/general?
+export SLACK_APP_TOKEN=
+
+# KOTはプロキシ経由でないとアクセスできないため、http-proxyの設定が必要
+# ex : export KOT_HTTPS_PROXY=https://{username}:{password}@secure-proxy.lapras.io:20682
+export KOT_HTTPS_PROXY=
+export KOT_TOKEN=
