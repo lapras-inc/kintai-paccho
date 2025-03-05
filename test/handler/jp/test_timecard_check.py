@@ -15,46 +15,21 @@ class TestTimecardCheck(unittest.TestCase):
             {
                 "date": "2023-04-01",
                 "dailyWorkings": [
-                    {
-                        "isError": True,
-                        "currentDateEmployee": {
-                            "code": "0009",
-                            "lastName": "山田",
-                            "firstName": "伝蔵"
-                        }
-                    },
-                    {
-                        "isError": True,
-                        "currentDateEmployee": {
-                            "code": "0010",
-                            "lastName": "熊本",
-                            "firstName": "太郎"
-                        }
-                    }
-                ]
+                    {"isError": True, "currentDateEmployee": {"code": "0009", "lastName": "山田", "firstName": "伝蔵"}},
+                    {"isError": True, "currentDateEmployee": {"code": "0010", "lastName": "熊本", "firstName": "太郎"}},
+                ],
             },
             {
                 "date": "2023-04-02",
                 "dailyWorkings": [
-                    {
-                        "isError": True,
-                        "currentDateEmployee": {
-                            "code": "0100",
-                            "lastName": "らぷ",
-                            "firstName": "らす"
-                        }
-                    },
+                    {"isError": True, "currentDateEmployee": {"code": "0100", "lastName": "らぷ", "firstName": "らす"}},
                     {
                         # 唯一勤怠エラーではない
                         "isError": False,
-                        "currentDateEmployee": {
-                            "code": "0200",
-                            "lastName": "テスト",
-                            "firstName": "ユーザー"
-                        }
-                    }
-                ]
-            }
+                        "currentDateEmployee": {"code": "0200", "lastName": "テスト", "firstName": "ユーザー"},
+                    },
+                ],
+            },
         ]
 
         say = MagicMock()
@@ -64,10 +39,10 @@ class TestTimecardCheck(unittest.TestCase):
 
         self.assertEqual(mocked_get_daily_timacard_data.call_count, 1)
         self.assertEqual(say.call_count, 1)
-        
+
         say_call_args, _ = say.call_args
         message = say_call_args[0]
-        
+
         # 基本的なメッセージ内容の確認
         self.assertIn("勤怠エラーがある人をお知らせするよ", message)
         self.assertIn("■2023-04-01", message)
@@ -75,7 +50,7 @@ class TestTimecardCheck(unittest.TestCase):
         self.assertIn("0010 熊本 太郎", message)
         self.assertIn("■2023-04-02", message)
         self.assertIn("0100 らぷ らす", message)
-        
+
         # エラーがない人は表示されていないことを確認
         self.assertNotIn("0200 テスト ユーザー", message)
 
@@ -86,15 +61,8 @@ class TestTimecardCheck(unittest.TestCase):
             {
                 "date": "2023-04-01",
                 "dailyWorkings": [
-                    {
-                        "isError": False,
-                        "currentDateEmployee": {
-                            "code": "0009",
-                            "lastName": "山田",
-                            "firstName": "伝蔵"
-                        }
-                    }
-                ]
+                    {"isError": False, "currentDateEmployee": {"code": "0009", "lastName": "山田", "firstName": "伝蔵"}}
+                ],
             }
         ]
 
@@ -105,10 +73,10 @@ class TestTimecardCheck(unittest.TestCase):
 
         self.assertEqual(mocked_get_daily_timacard_data.call_count, 1)
         self.assertEqual(say.call_count, 1)
-        
+
         say_call_args, _ = say.call_args
         message = say_call_args[0]
-        
+
         # エラーがない場合のメッセージ内容の確認
         self.assertIn("勤怠エラーの人はいないよ！やったね！", message)
 
@@ -124,10 +92,10 @@ class TestTimecardCheck(unittest.TestCase):
 
         self.assertEqual(mocked_get_daily_timacard_data.call_count, 1)
         self.assertEqual(say.call_count, 1)
-        
+
         say_call_args, _ = say.call_args
         message = say_call_args[0]
-        
+
         # データがない場合のメッセージ内容の確認
         self.assertIn("勤怠データが見つからなかったよ", message)
 
@@ -144,11 +112,13 @@ class TestTimecardCheck(unittest.TestCase):
 
     @mock.patch("handler.jp.timecard_check.response_general_error")
     @mock.patch("handler.jp.timecard_check.get_daily_timacard_data", side_effect=Exception)
-    def test_announce_timecard_errors__general_error(self, mocked_get_daily_timacard_data, mocked_response_general_error):
+    def test_announce_timecard_errors__general_error(
+        self, mocked_get_daily_timacard_data, mocked_response_general_error
+    ):
         say = MagicMock()
         request = SlackRequest(channel_id="dummy-channel-id", user_id="dummy-user-id", text="dummy-text")
 
         announce_timecard_errors(say=say, request=request)
 
         self.assertEqual(mocked_get_daily_timacard_data.call_count, 1)
-        self.assertEqual(mocked_response_general_error.call_count, 1) 
+        self.assertEqual(mocked_response_general_error.call_count, 1)

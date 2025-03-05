@@ -47,7 +47,7 @@ def announce_timecard_errors(say, request: SlackRequest):
             for daily_working in daily_data["dailyWorkings"]:
                 if daily_working["isError"] == True:
                     error_timecard.append(daily_working)
-            
+
             if error_timecard:
                 timecard_date = daily_data.get("date", "不明")
                 error_data[timecard_date] = error_timecard
@@ -88,4 +88,4 @@ def announce_timecard_errors(say, request: SlackRequest):
     except KOTException as e:
         response_kot_error(say, e)
     except Exception as e:
-        response_general_error(say, e) 
+        response_general_error(say, e)

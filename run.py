@@ -21,16 +21,11 @@ def create_app(is_test=False):
         token = os.environ["SLACK_BOT_TOKEN"]
         app = App(token=token)
 
-
     @app.event("app_mention")
     def handle_app_mention_events(event, say):
         # 勤怠エラーがある人をアナウンスする
         if "勤怠エラー" in event["text"].lower():
-            request = SlackRequest(
-                channel_id=event["channel"],
-                user_id=event["user"],
-                text=event["text"]
-            )
+            request = SlackRequest(channel_id=event["channel"], user_id=event["user"], text=event["text"])
             announce_timecard_errors(say, request)
 
     # record timestamp
