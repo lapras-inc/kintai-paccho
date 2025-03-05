@@ -10,6 +10,7 @@ from components.typing import SlackRequest
 from handler.jp.configuration import register_employee_code
 from handler.jp.extra import be_shy, how_to_use, i_am_not_alexa, i_am_not_siri
 from handler.jp.time_recorder import record_clock_in, record_clock_out, record_end_break, record_start_break
+from handler.jp.timecard_check import announce_timecard_errors
 
 
 def create_app(is_test=False):
@@ -19,6 +20,13 @@ def create_app(is_test=False):
     else:
         token = os.environ["SLACK_BOT_TOKEN"]
         app = App(token=token)
+
+    @app.event("app_mention")
+    def handle_app_mention_events(event, say):
+        # 勤怠エラーがある人をアナウンスする
+        if "勤怠エラー" in event["text"].lower():
+            request = SlackRequest(channel_id=event["channel"], user_id=event["user"], text=event["text"])
+            announce_timecard_errors(say, request)
 
     # record timestamp
     @app.message(re.compile("^おはー[！？!?]*$"))

@@ -30,9 +30,10 @@ Slash コマンドの登録
 ```
 $ git clone git@github.com:showwin/kintai-paccho.git
 $ cd kintai-paccho
-$ export SLACK_BOT_TOKEN=xoxb-<your-bot-token>  # Slack の Token を設定
-$ export SLACK_APP_TOKEN=xapp-<your-app-level-token>  # Slack の Token を設定
-$ export KOT_TOKEN=xxxxxxxxxxxxxxxx  # King of Time の Token を設定
+
+# 環境変数を設定
+$ cp .envrc.example .envrc
+$ direnv allow
 
 $ poetry install
 $ poetry run python run.py
