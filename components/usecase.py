@@ -33,22 +33,19 @@ def record_time(record_type: RecordType, employee_key):
     requester.post("/daily-workings/timerecord/{}".format(employee_key), payload)
 
 
-def get_daily_timacard_data(from_date=None, to_date=None):
+def get_daily_timacard_data(from_date, to_date):
     """
     日別勤怠データを取得する
     
     Args:
-        from_date: 取得開始日付（YYYY-MM-DD形式）。指定がない場合は今日の日付
-        to_date: 取得終了日付（YYYY-MM-DD形式）。指定がない場合はfrom_dateと同じ日付
+        from_date: 取得開始日付（YYYY-MM-DD形式）
+        to_date: 取得終了日付（YYYY-MM-DD形式）
         
     Returns:
         辞書型の日別勤怠データ
     """
     requester = KOTRequester()
-    start_date = from_date if from_date else _get_working_date()
-    end_date = to_date if to_date else start_date
-
-    uri = f"/daily-workings?&start={start_date}&end={end_date}&additionalFields=currentDateEmployee"
+    uri = f"/daily-workings?&start={from_date}&end={to_date}&additionalFields=currentDateEmployee"
     
     return requester.get(uri)
 

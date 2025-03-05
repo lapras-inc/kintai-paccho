@@ -5,7 +5,7 @@ from unittest import mock
 
 from freezegun import freeze_time
 
-from components.usecase import RecordType, _get_working_date, record_time, register_user
+from components.usecase import RecordType, _get_working_date, record_time, register_user, get_daily_timacard_data
 
 
 class TestUseCase(unittest.TestCase):
@@ -77,3 +77,25 @@ class TestUseCase(unittest.TestCase):
             with self.subTest(msg=f"current_time={current_time}, working_date={working_date}"):
                 with freeze_time(current_time):
                     self.assertEqual(_get_working_date(), working_date)
+
+    @mock.patch("components.requester.KOTRequester.get")
+    def test_get_daily_timacard_data(self, mocked_get):
+        # モックのレスポンスを設定
+        expected_response = {"data": "dummy-data"}
+        mocked_get.return_value = expected_response
+        
+        # パラメータ設定
+        from_date = "2025-06-01"
+        to_date = "2025-06-30"
+        
+        # 関数実行
+        result = get_daily_timacard_data(from_date=from_date, to_date=to_date)
+        
+        # 検証
+        self.assertEqual(mocked_get.call_count, 1)
+        self.assertEqual(result, expected_response)
+        
+        # 引数の検証
+        mocked_get_args, _ = mocked_get.call_args
+        expected_uri = f"/daily-workings?&start={from_date}&end={to_date}&additionalFields=currentDateEmployee"
+        self.assertEqual(mocked_get_args[0], expected_uri)
