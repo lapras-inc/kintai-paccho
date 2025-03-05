@@ -9,8 +9,8 @@ from slack_sdk import WebClient
 from components.typing import SlackRequest
 from handler.jp.configuration import register_employee_code
 from handler.jp.extra import be_shy, how_to_use, i_am_not_alexa, i_am_not_siri
-from handler.jp.timecard_check import announce_timecard_errors
 from handler.jp.time_recorder import record_clock_in, record_clock_out, record_end_break, record_start_break
+from handler.jp.timecard_check import announce_timecard_errors
 
 
 def create_app(is_test=False):

@@ -5,7 +5,7 @@ from unittest import mock
 
 from freezegun import freeze_time
 
-from components.usecase import RecordType, _get_working_date, record_time, register_user, get_daily_timacard_data
+from components.usecase import RecordType, _get_working_date, get_daily_timacard_data, record_time, register_user
 
 
 class TestUseCase(unittest.TestCase):
