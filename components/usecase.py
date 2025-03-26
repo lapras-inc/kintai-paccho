@@ -50,6 +50,36 @@ def get_daily_timacard_data(from_date, to_date):
     return requester.get(uri)
 
 
+def get_daily_schedule_data(from_date, to_date):
+    """
+    日別スケジュールデータを取得する
+
+    Args:
+        from_date: 取得開始日付（YYYY-MM-DD形式）
+        to_date: 取得終了日付（YYYY-MM-DD形式）
+
+    Returns:
+        辞書型の日別スケジュールデータ
+    """
+    requester = KOTRequester()
+    uri = f"/daily-schedules?&start={from_date}&end={to_date}&additionalFields=currentDateEmployee"
+
+    return requester.get(uri)
+
+
+def get_active_employees() -> list:
+    """
+    従業員データを取得する
+
+    Returns:
+        従業員データのリスト
+    """
+    requester = KOTRequester()
+    uri = f"/employees"
+
+    return requester.get(uri)
+
+
 def _get_working_date():
     """
     return today formatting '%Y-%m-%d'.
