@@ -33,9 +33,15 @@ def create_app(is_test=False):
     if is_test:
         client = WebClient(token="xoxb-valid", base_url="http://localhost:8888")
         app = App(client=client, signing_secret="secret")
+        # テスト環境では強制的にテスト用コマンド名を使用
+        def get_test_command_name(base_name):
+            return f"/{base_name}"
+
     else:
         token = os.environ["SLACK_BOT_TOKEN"]
         app = App(token=token)
+        # 本番環境では環境変数に応じてコマンド名を生成
+        get_test_command_name = get_command_name
 
     @app.event("app_mention")
     def handle_app_mention_events(event, say):
@@ -49,7 +55,7 @@ def create_app(is_test=False):
     def record_clock_in_listener(message, say):
         record_clock_in(say, SlackRequest.build_from_message(message))
 
-    @app.command(get_command_name("clock-in"))
+    @app.command(get_test_command_name("clock-in"))
     def record_clock_in_command(ack, command, say):
         ack()
         record_clock_in(say, SlackRequest.build_from_command(command))
@@ -58,7 +64,7 @@ def create_app(is_test=False):
     def record_clock_out_listener(message, say):
         record_clock_out(say, SlackRequest.build_from_message(message))
 
-    @app.command(get_command_name("clock-out"))
+    @app.command(get_test_command_name("clock-out"))
     def record_clock_out_command(ack, command, say):
         ack()
         record_clock_out(say, SlackRequest.build_from_command(command))
@@ -67,7 +73,7 @@ def create_app(is_test=False):
     def record_start_break_listener(message, say):
         record_start_break(say, SlackRequest.build_from_message(message))
 
-    @app.command(get_command_name("start-break"))
+    @app.command(get_test_command_name("start-break"))
     def record_start_break_command(ack, command, say):
         ack()
         record_start_break(say, SlackRequest.build_from_command(command))
@@ -76,13 +82,13 @@ def create_app(is_test=False):
     def record_end_break_listener(message, say):
         record_end_break(say, SlackRequest.build_from_message(message))
 
-    @app.command(get_command_name("end-break"))
+    @app.command(get_test_command_name("end-break"))
     def record_end_break_command(ack, command, say):
         ack()
         record_end_break(say, SlackRequest.build_from_command(command))
 
     # setting
-    @app.command(get_command_name("employee-code"))
+    @app.command(get_test_command_name("employee-code"))
     def employee_code_command(ack, command, say):
         ack()
         register_employee_code(say, SlackRequest.build_from_command(command))

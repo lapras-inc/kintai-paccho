@@ -181,10 +181,13 @@ def check_timecard_errors_for_user(user_id: str, say=None):
     if user_error_dates and say:
         # 日付をソートして表示用に整形
         sorted_dates = sorted(user_error_dates)
-        date_display = " / ".join(sorted_dates)
+        date_display = "\n".join(sorted_dates)
 
-        message = ":den_paccho1: < 勤怠エラーがあるみたい！早めに修正しようね！\n"
-        message += f"勤怠エラー日 : {date_display}"
+        message = ":alert: 勤怠エラーがあるみたい！早めに修正しようね！:alert:\n\n"
+        message += "```\n■勤怠エラーになっている日\n"
+        message += f"{date_display}\n"
+        message += "```\n\n"
+        message += "さぁ今すぐ修正しに行こう！ :gaspaccho_fall: → https://login.ta.kingoftime.jp/admin"
 
         say(message)
 
