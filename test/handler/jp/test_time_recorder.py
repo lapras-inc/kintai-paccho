@@ -12,9 +12,18 @@ class TestTimeRecorder(unittest.TestCase):
     @mock.patch("handler.jp.time_recorder.response_kot_error")
     @mock.patch("handler.jp.time_recorder.record_time")
     @mock.patch("components.repo.Employee.get_key", return_value="dummy-employee-key")
-    def test_record_clock_in(self, mocked_get_key, mocked_record_time, mocked_response_kot_error):
+    @mock.patch("handler.jp.timecard_check.is_kot_api_available", return_value=True)
+    @mock.patch("handler.jp.timecard_check.get_active_employees")
+    @mock.patch("handler.jp.timecard_check.get_daily_timacard_data")
+    @mock.patch("handler.jp.timecard_check.get_daily_schedule_data")
+    def test_record_clock_in(self, mocked_get_daily_schedule_data, mocked_get_daily_timacard_data, mocked_get_active_employees, mocked_is_kot_api_available, mocked_get_key, mocked_record_time, mocked_response_kot_error):
         say = MagicMock()
         request = SlackRequest(channel_id="dummy-channel-id", user_id="dummy-user-id", text="dummy-text")
+
+        # 勤怠エラーチェック用のモック設定
+        mocked_get_active_employees.return_value = []
+        mocked_get_daily_timacard_data.return_value = []
+        mocked_get_daily_schedule_data.return_value = []
 
         record_clock_in(say=say, request=request)
 
