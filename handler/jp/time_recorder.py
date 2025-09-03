@@ -33,6 +33,9 @@ def record_clock_out(say, request: SlackRequest):
     try:
         record_time(RecordType.CLOCK_OUT, employee_key)
         say(":gas_paccho_1: < おつー　打刻したよー")
+
+        # 勤怠エラーチェックがある場合は通知
+        check_timecard_errors_for_user(request.user_id, say)
     except KOTException as e:
         response_kot_error(say, e)
     except Exception as e:

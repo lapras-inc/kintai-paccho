@@ -8,9 +8,7 @@ from slack_sdk import WebClient
 
 from components.typing import SlackRequest
 from handler.jp.configuration import register_employee_code
-from handler.jp.time_recorder import (
-    record_clock_in, record_clock_out, record_end_break, record_start_break
-)
+from handler.jp.time_recorder import record_clock_in, record_clock_out, record_end_break, record_start_break
 from handler.jp.timecard_check import announce_timecard_errors
 
 
@@ -20,9 +18,7 @@ def get_command_name(base_name):
 
     valid_modes = ["production", "test"]
     if app_mode not in valid_modes:
-        raise ValueError(
-            f"SLACK_APP_MODE must be one of {valid_modes}, got: {app_mode}"
-        )
+        raise ValueError(f"SLACK_APP_MODE must be one of {valid_modes}, got: {app_mode}")
 
     if app_mode == "test":
         return f"/{base_name}-test"
