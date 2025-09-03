@@ -8,9 +8,25 @@ from slack_sdk import WebClient
 
 from components.typing import SlackRequest
 from handler.jp.configuration import register_employee_code
-from handler.jp.extra import be_shy, how_to_use, i_am_not_alexa, i_am_not_siri
-from handler.jp.time_recorder import record_clock_in, record_clock_out, record_end_break, record_start_break
+from handler.jp.time_recorder import (
+    record_clock_in, record_clock_out, record_end_break, record_start_break
+)
 from handler.jp.timecard_check import announce_timecard_errors
+
+
+def get_command_name(base_name):
+    """環境に応じてコマンド名を生成する"""
+    app_mode = os.environ.get("SLACK_APP_MODE", "production")
+
+    valid_modes = ["production", "test"]
+    if app_mode not in valid_modes:
+        raise ValueError(
+            f"SLACK_APP_MODE must be one of {valid_modes}, got: {app_mode}"
+        )
+
+    if app_mode == "test":
+        return f"/{base_name}-test"
+    return f"/{base_name}"
 
 
 def create_app(is_test=False):
@@ -33,7 +49,7 @@ def create_app(is_test=False):
     def record_clock_in_listener(message, say):
         record_clock_in(say, SlackRequest.build_from_message(message))
 
-    @app.command("/clock-in")
+    @app.command(get_command_name("clock-in"))
     def record_clock_in_command(ack, command, say):
         ack()
         record_clock_in(say, SlackRequest.build_from_command(command))
@@ -42,7 +58,7 @@ def create_app(is_test=False):
     def record_clock_out_listener(message, say):
         record_clock_out(say, SlackRequest.build_from_message(message))
 
-    @app.command("/clock-out")
+    @app.command(get_command_name("clock-out"))
     def record_clock_out_command(ack, command, say):
         ack()
         record_clock_out(say, SlackRequest.build_from_command(command))
@@ -51,7 +67,7 @@ def create_app(is_test=False):
     def record_start_break_listener(message, say):
         record_start_break(say, SlackRequest.build_from_message(message))
 
-    @app.command("/start-break")
+    @app.command(get_command_name("start-break"))
     def record_start_break_command(ack, command, say):
         ack()
         record_start_break(say, SlackRequest.build_from_command(command))
@@ -60,13 +76,13 @@ def create_app(is_test=False):
     def record_end_break_listener(message, say):
         record_end_break(say, SlackRequest.build_from_message(message))
 
-    @app.command("/end-break")
+    @app.command(get_command_name("end-break"))
     def record_end_break_command(ack, command, say):
         ack()
         record_end_break(say, SlackRequest.build_from_command(command))
 
     # setting
-    @app.command("/employee-code")
+    @app.command(get_command_name("employee-code"))
     def employee_code_command(ack, command, say):
         ack()
         register_employee_code(say, SlackRequest.build_from_command(command))
