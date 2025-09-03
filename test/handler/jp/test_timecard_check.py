@@ -215,7 +215,7 @@ class TestTimecardCheck(unittest.TestCase):
         message = say_call_args[0]
 
         # データがない場合のメッセージ内容の確認
-        self.assertIn("勤怠データが見つからなかったよ", message)
+        self.assertIn("勤怠データまたはスケジュールデータが見つからなかったよ", message)
 
     @mock.patch("handler.jp.timecard_check.is_kot_api_available", return_value=True)
     @mock.patch("handler.jp.timecard_check.get_active_employees", return_value=[])

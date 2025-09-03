@@ -14,3 +14,8 @@ export SLACK_APP_TOKEN=
 # ex : export KOT_HTTPS_PROXY=https://{username}:{password}@secure-proxy.lapras.io:20682
 export KOT_HTTPS_PROXY=
 export KOT_TOKEN=
+
+# Slack Appの動作モード設定
+# Slackのコマンドは全体でユニークなため、テスト用のAppに本番環境で使っているような /clock-in でコマンドを登録すると後勝になっていまい、本番側が動かなくなってしまう
+# ローカルで確認する場合は test を設定すること ※未設定だと production 扱いになる
+export SLACK_APP_MODE=test

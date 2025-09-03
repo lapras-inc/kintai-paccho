@@ -4,7 +4,7 @@ name: Check
 
 jobs:
   format:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
@@ -23,7 +23,7 @@ jobs:
     - run: poetry run isort . --check
 
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
