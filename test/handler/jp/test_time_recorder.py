@@ -18,7 +18,8 @@ class TestTimeRecorder(unittest.TestCase):
 
         record_clock_in(say=say, request=request)
 
-        self.assertEqual(mocked_get_key.call_count, 1)
+        # Employee.get_keyが2回呼ばれる
+        self.assertEqual(mocked_get_key.call_count, 2)
 
         self.assertEqual(mocked_record_time.call_count, 1)
 
@@ -150,7 +151,7 @@ class TestTimeRecorder(unittest.TestCase):
 
         record_clock_in(say=say, request=request)
 
-        # Employee.get_keyが2回呼ばれる（record_clock_in + check_timecard_errors_for_user）
+        # Employee.get_keyが2回呼ばれる
         self.assertEqual(mocked_get_key.call_count, 2)
 
         self.assertEqual(mocked_record_time.call_count, 1)
